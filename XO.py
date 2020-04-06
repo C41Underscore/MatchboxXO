@@ -1,5 +1,13 @@
+from AI import aiload, statecheck, aimove
+
 board = [["0", "0", "0"], ["0", "0", "0"], ["0", "0", "0"]]
 
+
+def printBoard():
+    for i in range(0, 3):
+        for x in range(0, 3):
+            print(board[x][i], end=" ")
+        print(end="\n")
 
 def isWinner():
     for i in range(0, 3):
@@ -14,8 +22,16 @@ def isWinner():
         return 1
 
 if __name__ == "__main__":
+    aiload()
     playerXChoice = 0
     playerYChoice = 0
     print("Welcome to XO!")
+    printBoard()
     while isWinner() != 1:
-        print("X enter choice: ", end="")
+        print("X enter X choice: ", end="")
+        playerXChoice = int(input())
+        print("X enter Y choice: ", end="")
+        playerYChoice = int(input())
+        board[playerYChoice][playerXChoice] = "X"
+        printBoard()
+        aimove()
