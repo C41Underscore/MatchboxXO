@@ -50,13 +50,14 @@ def aiload():
     with open("states.txt", "r") as statefile:
         for state in statefile:
             stateArr = state.strip().split(":")
-            deformattedWeights = []
-            weights = stateArr[1].split(";")
-            weights = (",".join(weights)).split(",")
-            deformattedWeights.append(weights[0])
-            for i in range(1, 9):
-                deformattedWeights.append(str(int(weights[i]) - int(weights[i - 1])))
-            states[stateArr[0]] = str(",".join(deformattedWeights[0:3])) + ";" + str(",".join(deformattedWeights[3:6]) + ";" + str(",".join(deformattedWeights[6:9])))
+            states[stateArr[0]] = stateArr[1]
+            # deformattedWeights = []
+            # weights = stateArr[1].split(";")
+            # weights = (",".join(weights)).split(",")
+            # deformattedWeights.append(weights[0])
+            # for i in range(1, 9):
+            #     deformattedWeights.append(str(int(weights[i]) - int(weights[i - 1])))
+            # states[stateArr[0]] = str(",".join(deformattedWeights[0:3])) + ";" + str(",".join(deformattedWeights[3:6]) + ";" + str(",".join(deformattedWeights[6:9])))
             #print(states[stateArr[0]])
 
 def statecheck(state):
@@ -65,7 +66,7 @@ def statecheck(state):
         if i == state:
             alreadySeen = True
     if not alreadySeen:
-        states[state] = ":2,2,2;2,2,2;2,2,2"
+        states[state] = ":2,4,6;8,10,12;14,16,18"
     return alreadySeen
 
 def aimove(board):

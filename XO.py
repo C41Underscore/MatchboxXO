@@ -1,6 +1,10 @@
 from AI import aiload, statecheck, aimove, aiadjust
 from random import randint
 
+#To do -
+#Fix the currently crappy weight formatting system - maybe just scrap the formatting and adjust weights a different way during runtime
+#Get the AI to select a position using the proabilities determined by the weights
+
 board = list([["B", "B", "B"], ["B", "B", "B"], ["B", "B", "B"]])
 
 
