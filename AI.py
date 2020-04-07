@@ -3,14 +3,25 @@ from random import randint
 states = {}
 statesplayed = {}
 
+# def deformatstates():
+#     for state in states.keys():
+#         deformattedWeights = []
+#
+
 def formatstates():
     for state in statesplayed.keys():
-        formattedWeights = 0
+        formattedWeights = []
         weightTotal = 0
         weights = states[state].split(";")
         weights = ",".join(weights)
-        weights[0][0] = weights[0][0].strip(":")
+        weights = weights.strip(":")
+        weights = weights.split(",")
         print(weights)
+        for weight in weights:
+            weightTotal += int(weight)
+            formattedWeights.append(str(weightTotal))
+        formattedWeights = ",".join(formattedWeights[0:3]) + ";" + ",".join(formattedWeights[3:6]) + ";" + ",".join(formattedWeights[6:9])
+        states[state] = formattedWeights
 
 
 def aisave():
