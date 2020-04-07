@@ -35,6 +35,7 @@ if __name__ == "__main__":
     while turnCount <= 9:
         board = list(aimove(board))
         if isWinner() == 1:
+            printBoard()
             aiadjust(1)
             break
         printBoard()
@@ -48,6 +49,7 @@ if __name__ == "__main__":
             playerYChoice = randint(0, 2)
         board[playerYChoice][playerXChoice] = "O"
         if isWinner() == 1:
+            printBoard()
             aiadjust(0)
             break
         turnCount += 1

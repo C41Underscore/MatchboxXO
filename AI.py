@@ -3,11 +3,6 @@ from random import randint
 states = {}
 statesplayed = {}
 
-# def deformatstates():
-#     for state in states.keys():
-#         deformattedWeights = []
-#
-
 def formatstates():
     for state in statesplayed.keys():
         formattedWeights = []
@@ -16,7 +11,7 @@ def formatstates():
         weights = ",".join(weights)
         weights = weights.strip(":")
         weights = weights.split(",")
-        print(weights)
+       #print(weights)
         for weight in weights:
             weightTotal += int(weight)
             formattedWeights.append(str(weightTotal))
@@ -31,20 +26,23 @@ def aisave():
 
 def aiadjust(won):
     for state in statesplayed.keys():
+        print(state)
         weights = states[state].split(";")
+        #print(weights)
         weights = [weights[0].split(","), weights[1].split(","), weights[2].split(",")]
         weights[0][0] = weights[0][0].strip(":")
         if won == 0:
             weights[statesplayed[state][1]][statesplayed[state][0]] = str(int(weights[statesplayed[state][1]][statesplayed[state][0]]) - 2)
             if int(weights[statesplayed[state][1]][statesplayed[state][0]]) < 0:
-                weights[statesplayed[state][1]][statesplayed[state][0]] = "0"
+                weights[statesplayed[state][1]][statesplayed[state][0]] = "0"#This also is not working
         if won == 1:
             weights[statesplayed[state][1]][statesplayed[state][0]] = str(int(weights[statesplayed[state][1]][statesplayed[state][0]]) + 2)
         if won == 2:
             weights[statesplayed[state][1]][statesplayed[state][0]] = str(int(weights[statesplayed[state][1]][statesplayed[state][0]]) + 1)
         weights = [",".join(weights[0]), ",".join(weights[1]), ",".join(weights[2])]
         weights = ";".join(weights)
-        states[state] = weights
+        states[state] = weights#Fix the problem that weights are becoming super high for no reason
+        print(weights)
         formatstates()
         aisave()
 
@@ -52,7 +50,14 @@ def aiload():
     with open("states.txt", "r") as statefile:
         for state in statefile:
             stateArr = state.strip().split(":")
-            states[stateArr[0]] = stateArr[1]
+            deformattedWeights = []
+            weights = stateArr[1].split(";")
+            weights = (",".join(weights)).split(",")
+            deformattedWeights.append(weights[0])
+            for i in range(1, 9):
+                deformattedWeights.append(str(int(weights[i]) - int(weights[i - 1])))
+            states[stateArr[0]] = str(",".join(deformattedWeights[0:3])) + ";" + str(",".join(deformattedWeights[3:6]) + ";" + str(",".join(deformattedWeights[6:9])))
+            #print(states[stateArr[0]])
 
 def statecheck(state):
     alreadySeen = False
