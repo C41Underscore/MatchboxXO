@@ -1,13 +1,7 @@
-from AI import aiload, statecheck, aimove, aiadjust
+from AI import aiload, aimove, aiadjust
 from random import randint
 
-#To do -
-#Fix the currently crappy weight formatting system - maybe just scrap the formatting and adjust weights a different way during runtime
-#Get the AI to select a position using the proabilities determined by the weights
-
 board = list([["B", "B", "B"], ["B", "B", "B"], ["B", "B", "B"]])
-trainerwins = 0
-aiwins = 0
 
 
 def printBoard():
@@ -31,10 +25,9 @@ def isWinner():
     return 0
 
 
-def playgame(random, showBoard):
-    global trainerwins
-    global aiwins
+def playgame(random):
     global board
+    showBoard = not random
     aiload()
     turnCount = 1
     x = 0
@@ -47,7 +40,6 @@ def playgame(random, showBoard):
             if showBoard:
                 printBoard()
             print("The AI won!")
-            aiwins += 1
             aiadjust(1)
             break
         if showBoard:
@@ -78,7 +70,6 @@ def playgame(random, showBoard):
             if showBoard:
                 printBoard()
             print("The trainer won!")
-            trainerwins += 1
             aiadjust(0)
             break
         turnCount += 1
@@ -88,9 +79,14 @@ def playgame(random, showBoard):
 
 
 if __name__ == "__main__":
-    # for i in range(0, 2750):
-    #     board = list([["B", "B", "B"], ["B", "B", "B"], ["B", "B", "B"]])
-    playgame(False, True)
+    #The code to execute if you want to train the AI - improve its weights
+    #######
+    #for i in range(0, 2750):
+        #board = list([["B", "B", "B"], ["B", "B", "B"], ["B", "B", "B"]])
+    #######
+
+    #This function will execute the game sequence - an argument of True will train the AI
+    playgame(False)
 
 
 
