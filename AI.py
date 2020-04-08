@@ -13,25 +13,14 @@ def aisave():
 
 def aiadjust(won):
     for state in statesplayed.keys():
-        #print(state)
         weights = states[state].split(";")
-        #print(weights)
         weights = [weights[0].split(","), weights[1].split(","), weights[2].split(",")]
         weights[0][0] = weights[0][0].strip(":")
-        currentWeight = int(weights[weightindex[statesplayed[state]][1]][weightindex[statesplayed[state][0]]])
-        if won == 0:
-            if currentWeight - 2 < 0:
-                weights[weightindex[statesplayed[state]][1]][weightindex[statesplayed[state][0]]] = "0"
-            else:
-                weights[weightindex[statesplayed[state]][1]][weightindex[statesplayed[state][0]]] = str(currentWeight - 2)
-        if won == 1:
-            weights[weightindex[statesplayed[state]][1]][weightindex[statesplayed[state][0]]] = str(currentWeight + 1)
-        if won == 2:
-            weights[weightindex[statesplayed[state]][1]][weightindex[statesplayed[state][0]]] = str(currentWeight + 2)
-        weights = [",".join(weights[0]), ",".join(weights[1]), ",".join(weights[2])]
-        weights = ";".join(weights)
-        states[state] = weights
-        #print(weights)
+        print(weights)
+        #check the outcome of the game
+        #adjust the weight in question
+        #adjust the other weights - if they go below 0, make them 0
+        #Think about the weight system, is it really that good, maybe change it up to the old version - create an algorithm which could work with that?
         aisave()
 
 
