@@ -6,12 +6,14 @@ from random import randint
 #Get the AI to select a position using the proabilities determined by the weights
 
 board = list([["B", "B", "B"], ["B", "B", "B"], ["B", "B", "B"]])
+trainerwins = 0
+aiwins = 0
 
 
 def printBoard():
     for i in range(0, 3):
         for x in range(0, 3):
-            print(board[x][i], end=" ")
+            print(board[i][x], end=" ")
         print(end="\n")
     print(end="\n")
 
@@ -29,36 +31,66 @@ def isWinner():
     return 0
 
 
-if __name__ == "__main__":
+def playgame(random, showBoard):
+    global trainerwins
+    global aiwins
+    global board
     aiload()
     turnCount = 1
-    playerXChoice = 0
-    playerYChoice = 0
-    print("Welcome to XO!")
-    printBoard()
+    x = 0
+    y = 0
     while turnCount <= 9:
+        if showBoard:
+            printBoard()
         board = list(aimove(board))
         if isWinner() == 1:
-            printBoard()
+            if showBoard:
+                printBoard()
+            print("The AI won!")
+            aiwins += 1
             aiadjust(1)
             break
-        printBoard()
+        if showBoard:
+            printBoard()
         turnCount += 1
         if turnCount > 9:
             break
-        playerXChoice = randint(0, 2)
-        playerYChoice = randint(0, 2)
-        while board[playerYChoice][playerXChoice] != "B" and board[playerYChoice][playerXChoice] != "O":
-            playerXChoice = randint(0, 2)
-            playerYChoice = randint(0, 2)
-        board[playerYChoice][playerXChoice] = "O"
+        if random:
+            x = randint(0, 2)
+            y = randint(0, 2)
+        else:
+            print("Enter X")
+            x = int(input())
+            print("Enter Y")
+            y = int(input())
+        while board[y][x] == "X" or board[y][x] == "O":
+            if random:
+                x = randint(0, 2)
+                y = randint(0, 2)
+            else:
+                print("Enter valid position")
+                print("Enter X")
+                x = int(input())
+                print("Enter Y")
+                y = int(input())
+        board[y][x] = "O"
         if isWinner() == 1:
-            printBoard()
+            if showBoard:
+                printBoard()
+            print("The trainer won!")
+            trainerwins += 1
             aiadjust(0)
             break
         turnCount += 1
-        printBoard()
     if turnCount > 9:
+        print("It was a draw!")
         aiadjust(2)
+
+
+if __name__ == "__main__":
+    # for i in range(0, 2750):
+    #     board = list([["B", "B", "B"], ["B", "B", "B"], ["B", "B", "B"]])
+    playgame(False, True)
+
 
 

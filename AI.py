@@ -1,4 +1,5 @@
 from random import randint
+import os
 
 weightindex = [(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2)]
 states = {}
@@ -6,29 +7,49 @@ statesplayed = {}
 
 
 def aisave():
+    global statesplayed
+    global states
     with open("states.txt", "w") as statefile:
         for state, weights in zip(states.keys(), states.values()):
             print(state + ":" + weights, end="\n", file=statefile)
+    statesplayed = {}
 
 
-def aiadjust(won):
+def aiadjust(outcome):
+    #print(statesplayed)
     for state in statesplayed.keys():
-        weights = states[state].split(";")
-        weights = [weights[0].split(","), weights[1].split(","), weights[2].split(",")]
-        weights[0][0] = weights[0][0].strip(":")
-        print(weights)
+        weights = states[state].split(",")
+        weights = [int(i) for i in weights]
+        #print(statesplayed.keys())
+        #print(str(weights[statesplayed[state]]) + " " + str(statesplayed[state]) + " " + str(len(weights)))
+        if outcome == 0:
+            for i in range(0, 2):
+                for x in range(0, len(weights) - 1):
+                    if weights[x] == weights[statesplayed[state]]:
+                        weights.pop(x)
+                        statesplayed[state] -= 1
+                        break
+        elif outcome == 1:
+            weights.append(weights[statesplayed[state]])
+            weights.append(weights[statesplayed[state]])
+        elif outcome == 2:
+            weights.append(weights[statesplayed[state]])
+        weights = [str(i) for i in weights]
+        states[state] = ",".join(weights)
         #check the outcome of the game
         #adjust the weight in question
         #adjust the other weights - if they go below 0, make them 0
         #Think about the weight system, is it really that good, maybe change it up to the old version - create an algorithm which could work with that?
-        aisave()
+    aisave()
 
 
 def aiload():
-    with open("states.txt", "r") as statefile:
-        for state in statefile:
-            stateArr = state.strip().split(":")
-            states[stateArr[0]] = stateArr[1]
+    if os.path.getsize("states.txt") > 0:
+        with open("states.txt", "r") as statefile:
+            for state in statefile:
+                stateArr = state.strip().split(":")
+                stateArr[1] = stateArr[1].strip(":")
+                states[stateArr[0]] = stateArr[1]
 
 
 def statecheck(state):
@@ -37,31 +58,26 @@ def statecheck(state):
         if i == state:
             alreadySeen = True
     if not alreadySeen:
-        states[state] = ":2,4,6;8,10,12;14,16,18"
+        states[state] = ""
+        for i in range(0, 9):
+            states[state] += str(i) + "," + str(i)
+            if i != 8:
+                states[state] += ","
     return alreadySeen
 
 
 def aimove(board):
-    x = 0
-    y = 0
-    boardState = ""
-    boardState += "".join(board[0]) + "".join(board[1]) + "".join(board[2])
+    boardState = "".join(board[0]) + "".join(board[1]) + "".join(board[2])
     statecheck(boardState)
-    weights = states[boardState].strip(":").split(";")
-    weights = weights[0].split(",") + weights[1].split(",") + weights[2].split(",")
+    weights = states[boardState].split(",")
     weights = [int(i) for i in weights]
-    weights.insert(0, 0)
+    positionFound = False
     position = 0
-    positionfound = False
-    while not positionfound:
-        position = randint(0, weights[9])
-        for i in range(1, 10):
-            if weights[i - 1] <= position < weights[i]:
-                if board[weightindex[i - 1][1]][weightindex[i - 1][0]] != "X" or board[weightindex[i - 1][1]][weightindex[i - 1][0]] != "O":
-                    x = weightindex[i - 1][0]
-                    y = weightindex[i - 1][1]
-                    board[weightindex[i - 1][1]][weightindex[i - 1][0]] = "X"
-                    position = i - 1
-                    positionfound = True
-    statesplayed[boardState] = position
+    while not positionFound:
+        position = randint(0, len(weights) - 1)
+        boardLocation = weightindex[int(weights[position])]
+        if board[boardLocation[1]][boardLocation[0]] != "X" and board[boardLocation[1]][boardLocation[0]] != "O":
+            board[boardLocation[1]][boardLocation[0]] = "X"
+            statesplayed[boardState] = position
+            positionFound = True
     return board
