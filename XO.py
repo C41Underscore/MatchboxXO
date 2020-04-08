@@ -17,7 +17,7 @@ def printBoard():
 
 def isWinner():
     for i in range(0, 3):
-        if board[i][0] == board[i][1] and board[i][1] == board[i][2] and board[i][1] != "B":
+        if board[i][0] == board[i][1] == board[i][2] != "B":
             return 1
     for i in range(0, 3):
         if board[0][i] == board[1][i] and board[1][i] == board[2][i] and board[1][i] != "B":
@@ -48,7 +48,7 @@ if __name__ == "__main__":
             break
         playerXChoice = randint(0, 2)
         playerYChoice = randint(0, 2)
-        while board[playerYChoice][playerXChoice] != "B":
+        while board[playerYChoice][playerXChoice] != "B" and board[playerYChoice][playerXChoice] != "O":
             playerXChoice = randint(0, 2)
             playerYChoice = randint(0, 2)
         board[playerYChoice][playerXChoice] = "O"
